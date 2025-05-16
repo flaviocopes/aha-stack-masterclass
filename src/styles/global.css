@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+
+.bg-stripes-darkgray-yellow {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #1f2937,
+    #1f2937 25px,
+    #f6e711 25px,
+    #f6e711 50px
+  );
+}
+
+.dashed-border-top {
+  position: relative;
+  background-image: repeating-linear-gradient(
+    to right,
+    currentColor,
+    currentColor 7px,
+    transparent 7px,
+    transparent 20px
+  );
+  background-size: 100% 2px;
+  background-position: top;
+  background-repeat: no-repeat;
+  border-top: 1px solid transparent;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
+}
+
+[x-cloak] {
+  /* fix alpine js flicker on load */
+  display: none;
+}
+
+.font-rounded {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+.select-custom-arrow-icon {
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23000"><path d="M7 10l5 5 5-5z"></path></svg>'); /* SVG arrow */
+  background-repeat: no-repeat;
+  background-position: right 0 center; /* Adjust as needed */
+  background-size: 1.5rem; /* Adjust as needed */
+}
+
+@media (prefers-color-scheme: dark) {
+  .select-custom-arrow-icon {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><path d="M7 10l5 5 5-5z"></path></svg>');
+  }
+}
