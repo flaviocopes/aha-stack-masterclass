@@ -9,7 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/node": "^9.2.1",
+    "@fontsource/m-plus-rounded-1c": "^5.2.5",
     "@tailwindcss/vite": "^4.1.6",
     "@types/alpinejs": "^3.13.11",
     "alpinejs": "^3.14.9",
@@ -17,6 +19,7 @@
     "dotenv": "^16.5.0",
     "htmx.org": "^2.0.4",
     "pocketbase": "^0.26.0",
-    "tailwindcss": "^4.1.6"
+    "tailwindcss": "^4.1.6",
+    "typescript": "^5.8.3"
   }
 }
