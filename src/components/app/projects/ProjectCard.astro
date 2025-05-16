@@ -23,33 +23,6 @@ export function projectStatus(status: string) {
 }
 ---
 
-<style>
-  .bg-stripes-darkgray-yellow {
-    background-image: repeating-linear-gradient(
-      45deg,
-      #1f2937,
-      #1f2937 25px,
-      #f6e711 25px,
-      #f6e711 50px
-    );
-  }
-
-  .dashed-border-top {
-    position: relative;
-    background-image: repeating-linear-gradient(
-      to right,
-      currentColor,
-      currentColor 7px,
-      transparent 7px,
-      transparent 20px
-    );
-    background-size: 100% 2px;
-    background-position: top;
-    background-repeat: no-repeat;
-    border-top: 1px solid transparent;
-  }
-</style>
-
 <li
   class='text-zinc-800 dark:text-white border dark:border-none rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 hover:dark:bg-zinc-700'>
   <a href={`/app/project/${project.id}`}>

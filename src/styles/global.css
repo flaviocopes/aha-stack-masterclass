@@ -1,1 +1,31 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+.bg-stripes-darkgray-yellow {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #1f2937,
+    #1f2937 25px,
+    #f6e711 25px,
+    #f6e711 50px
+  );
+}
+
+.dashed-border-top {
+  position: relative;
+  background-image: repeating-linear-gradient(
+    to right,
+    currentColor,
+    currentColor 7px,
+    transparent 7px,
+    transparent 20px
+  );
+  background-size: 100% 2px;
+  background-position: top;
+  background-repeat: no-repeat;
+  border-top: 1px solid transparent;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
+}
