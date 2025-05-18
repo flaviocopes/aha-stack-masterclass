@@ -1,0 +1,21 @@
+---
+import '@src/styles/global.css'
+
+const { title = 'Secretplan' } = Astro.props
+---
+
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='viewport' content='width=device-width' />
+    <title>{title}</title>
+    <meta name='description' content='A project management tool' />
+  </head>
+
+  <body class='dark:bg-black dark:text-white'>
+    <div class='max-w-5xl px-4 py-4 mx-auto'>
+      <slot />
+    </div>
+  </body>
+</html>

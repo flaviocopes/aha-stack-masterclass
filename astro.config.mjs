@@ -14,5 +14,9 @@ export default defineConfig({
     mode: 'standalone'
   }),
   
-  output: "server"
+  output: "server",
+
+  redirects: {
+    '/app': '/app/dashboard',
+  }
 });

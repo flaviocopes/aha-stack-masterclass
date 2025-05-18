@@ -40,6 +40,7 @@ export async function getProjects(pb: TypedPocketBase) {
 export async function addProject(pb: TypedPocketBase, name: string) {
   const newProject = await pb.collection('projects').create({
     name,
+    created_by: pb.authStore.record?.id,
     status: 'not started',
   })
 
@@ -59,6 +60,7 @@ export async function addTask(
 ) {
   const newTask = await pb.collection('tasks').create({
     project: project_id,
+    created_by: pb.authStore.record?.id,
     text,
   })
 
