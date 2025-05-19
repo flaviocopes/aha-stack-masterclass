@@ -130,3 +130,27 @@ export async function getStarredTasks(
 
   return tasks
 }
+
+export function processImages(pb: TypedPocketBase, task: TasksResponse) {
+  type ImageItem = {
+    name: string
+    url: string
+    url_larger: string
+  }
+
+  const images: ImageItem[] = []
+
+  task.images?.map((image: string) => {
+    images.push({
+      name: image,
+      url: pb.files.getURL(task, image, {
+        thumb: '0x200',
+      }),
+      url_larger: pb.files.getURL(task, image, {
+        thumb: '0x800',
+      }),
+    })
+  })
+
+  return images
+}

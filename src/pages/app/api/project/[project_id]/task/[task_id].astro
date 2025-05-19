@@ -8,7 +8,13 @@ import TasksList from '@components/app/tasks/TasksList.astro'
 const { task_id = '', project_id = '' } = Astro.params
 
 if (Astro.request.method === 'DELETE') {
-  await deleteTask(Astro.locals.pb, task_id)
+  try {
+    await deleteTask(Astro.locals.pb, task_id)
+  } catch (e) {
+    return new Response('An error occurred', {
+      status: 400,
+    })
+  }
   return new Response(null, { status: 200 })
 }
 
@@ -44,6 +50,23 @@ if (Astro.request.method === 'PUT') {
     await updateTask(Astro.locals.pb, task_id, {
       id: task_id,
       text: formData.get('task-text') as string,
+    })
+  } else if (action === 'upload') {
+    try {
+      await updateTask(Astro.locals.pb, task_id, {
+        id: task_id,
+        //@ts-expect-error
+        'images+': formData.getAll('images') as string[],
+      })
+    } catch (e) {
+      return new Response('Cannot upload image', {
+        status: 400,
+      })
+    }
+  } else if (action === 'delete-image') {
+    await updateTask(Astro.locals.pb, task_id, {
+      //@ts-expect-error
+      'images-': formData.get('image') as string,
     })
   } else {
     return new Response('Invalid action', { status: 400 })

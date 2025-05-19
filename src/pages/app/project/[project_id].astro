@@ -8,9 +8,10 @@ import TasksList from '@components/app/tasks/TasksList.astro'
 
 const { project_id = '' } = Astro.params
 
-const project = await getProject(Astro.locals.pb, project_id)
-
-if (!project) {
+let project
+try {
+  project = await getProject(Astro.locals.pb, project_id)
+} catch (e) {
   return Astro.redirect('/app/dashboard')
 }
 ---
