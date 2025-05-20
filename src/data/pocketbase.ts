@@ -4,6 +4,7 @@ import type {
   ProjectsRecord,
   TasksRecord,
   TasksResponse,
+  TeamsRecord,
 } from '@src/data/pocketbase-types'
 
 type TexpandProject = {
@@ -31,17 +32,34 @@ function getStatus(project: ProjectsResponse) {
   }
 }
 
-export async function getProjects(pb: TypedPocketBase) {
-  const projects = await pb.collection('projects').getFullList()
+export async function getProjects({
+  pb,
+  team_id,
+}: {
+  pb: TypedPocketBase
+  team_id?: string
+}) {
+  const options = { filter: 'team = ""' }
+
+  if (team_id) {
+    options.filter = `team = "${team_id as string}"`
+  }
+
+  const projects = await pb.collection('projects').getFullList(options)
 
   return projects.sort((a, b) => getStatus(a) - getStatus(b))
 }
 
-export async function addProject(pb: TypedPocketBase, name: string) {
+export async function addProject(
+  pb: TypedPocketBase,
+  name: string,
+  team_id?: string
+) {
   const newProject = await pb.collection('projects').create({
     name,
     created_by: pb.authStore.record?.id,
     status: 'not started',
+    team: team_id,
   })
 
   return newProject
@@ -116,13 +134,23 @@ export async function updateTask(
   await pb.collection('tasks').update(id, data)
 }
 
-export async function getStarredTasks(
+export async function getStarredTasks({
+  pb,
+  team_id = null,
+}: {
   pb: TypedPocketBase
-): Promise<TasksResponse<TexpandProject>[]> {
+  team_id?: string | null
+}): Promise<TasksResponse<TexpandProject>[]> {
   const options = {
     sort: '-starred_on',
     filter: 'starred = true && completed = false',
     expand: 'project',
+  }
+
+  if (team_id) {
+    options.filter += ` && project.team = "${team_id}"`
+  } else {
+    options.filter += ` && project.team = ""`
   }
 
   let tasks: TasksResponse<TexpandProject>[] = []
@@ -153,4 +181,45 @@ export function processImages(pb: TypedPocketBase, task: TasksResponse) {
   })
 
   return images
+}
+
+export async function addTeam(pb: TypedPocketBase, name: string) {
+  let team = await pb.collection('teams').create({
+    name,
+    created_by: pb.authStore.record?.id,
+    status: 'inactive',
+  })
+
+  return team
+}
+
+export async function getTeam(pb: TypedPocketBase, id: string) {
+  const team = await pb.collection('teams').getOne(id)
+
+  return team
+}
+
+export async function userIsTeamOwner(pb: TypedPocketBase, team_id: string) {
+  const team = await getTeam(pb, team_id)
+  if (team.created_by === pb.authStore.record?.id) {
+    return true
+  }
+  return false
+}
+
+export async function getTeams(pb: TypedPocketBase) {
+  const teams = await pb.collection('teams').getFullList()
+  return teams
+}
+
+export async function deleteTeam(pb: TypedPocketBase, id: string) {
+  return await pb.collection('teams').delete(id)
+}
+
+export async function updateTeam(
+  pb: TypedPocketBase,
+  id: string,
+  data: TeamsRecord
+) {
+  await pb.collection('teams').update(id, data)
 }

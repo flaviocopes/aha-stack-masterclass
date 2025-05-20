@@ -13,6 +13,7 @@ export enum Collections {
 	Superusers = "_superusers",
 	Projects = "projects",
 	Tasks = "tasks",
+	Teams = "teams",
 	Users = "users",
 }
 
@@ -108,6 +109,7 @@ export type ProjectsRecord = {
 	id: string
 	name?: string
 	status?: ProjectsStatusOptions
+	team?: RecordIdString
 	updated?: IsoDateString
 }
 
@@ -122,6 +124,23 @@ export type TasksRecord = {
 	starred?: boolean
 	starred_on?: IsoDateString
 	text?: string
+	updated?: IsoDateString
+}
+
+export enum TeamsStatusOptions {
+	"inactive" = "inactive",
+	"active" = "active",
+	"freezed" = "freezed",
+}
+export type TeamsRecord = {
+	created?: IsoDateString
+	created_by?: RecordIdString
+	id: string
+	members?: RecordIdString[]
+	name?: string
+	portal_url?: string
+	status?: TeamsStatusOptions
+	stripe_subscription_id?: string
 	updated?: IsoDateString
 }
 
@@ -146,6 +165,7 @@ export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemF
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type ProjectsResponse<Texpand = unknown> = Required<ProjectsRecord> & BaseSystemFields<Texpand>
 export type TasksResponse<Texpand = unknown> = Required<TasksRecord> & BaseSystemFields<Texpand>
+export type TeamsResponse<Texpand = unknown> = Required<TeamsRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions
@@ -158,6 +178,7 @@ export type CollectionRecords = {
 	_superusers: SuperusersRecord
 	projects: ProjectsRecord
 	tasks: TasksRecord
+	teams: TeamsRecord
 	users: UsersRecord
 }
 
@@ -169,6 +190,7 @@ export type CollectionResponses = {
 	_superusers: SuperusersResponse
 	projects: ProjectsResponse
 	tasks: TasksResponse
+	teams: TeamsResponse
 	users: UsersResponse
 }
 
@@ -183,5 +205,6 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
 	collection(idOrName: 'projects'): RecordService<ProjectsResponse>
 	collection(idOrName: 'tasks'): RecordService<TasksResponse>
+	collection(idOrName: 'teams'): RecordService<TeamsResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>
 }

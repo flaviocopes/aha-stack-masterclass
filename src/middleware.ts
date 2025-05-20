@@ -11,27 +11,35 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // globally disable auto cancellation
   context.locals.pb.autoCancellation(false)
 
-  if (!(await isLoggedIn(context.locals.pb, context.request))) {
-    if (context.url.pathname.startsWith('/app/api')) {
-      return new Response('Unauthorized', {
-        status: 401,
-      })
-    }
-
-    if (context.url.pathname.startsWith('/app')) {
-      return context.redirect('/login')
-    }
-  }
-
-  if (await isLoggedIn(context.locals.pb, context.request)) {
-    const verified = await isUserVerified(context.locals.pb)
-    if (!verified) {
-      if (context.url.pathname.startsWith('/app')) {
-        return context.redirect('/verify')
+  //special cases for stripe workflow
+  if (
+    context.url.pathname === '/app/api/stripe/webhook' ||
+    context.url.pathname.startsWith('/app/api/stripe/callback/success/')
+  ) {
+    return next()
+  } else {
+    if (!(await isLoggedIn(context.locals.pb, context.request))) {
+      if (context.url.pathname.startsWith('/app/api')) {
+        return new Response('Unauthorized', {
+          status: 401,
+        })
       }
-    } else {
-      if (context.url.pathname === '/verify') {
-        return context.redirect('/app/dashboard')
+
+      if (context.url.pathname.startsWith('/app')) {
+        return context.redirect('/login')
+      }
+    }
+
+    if (await isLoggedIn(context.locals.pb, context.request)) {
+      const verified = await isUserVerified(context.locals.pb)
+      if (!verified) {
+        if (context.url.pathname.startsWith('/app')) {
+          return context.redirect('/verify')
+        }
+      } else {
+        if (context.url.pathname === '/verify') {
+          return context.redirect('/app/dashboard')
+        }
       }
     }
   }
