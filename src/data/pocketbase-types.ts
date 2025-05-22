@@ -11,6 +11,7 @@ export enum Collections {
 	Mfas = "_mfas",
 	Otps = "_otps",
 	Superusers = "_superusers",
+	Invites = "invites",
 	Projects = "projects",
 	Tasks = "tasks",
 	Teams = "teams",
@@ -93,6 +94,14 @@ export type SuperusersRecord = {
 	verified?: boolean
 }
 
+export type InvitesRecord = {
+	created?: IsoDateString
+	email?: string
+	id: string
+	team?: RecordIdString
+	updated?: IsoDateString
+}
+
 export enum ProjectsStatusOptions {
 	"not started" = "not started",
 	"started" = "started",
@@ -163,6 +172,7 @@ export type ExternalauthsResponse<Texpand = unknown> = Required<ExternalauthsRec
 export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemFields<Texpand>
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
+export type InvitesResponse<Texpand = unknown> = Required<InvitesRecord> & BaseSystemFields<Texpand>
 export type ProjectsResponse<Texpand = unknown> = Required<ProjectsRecord> & BaseSystemFields<Texpand>
 export type TasksResponse<Texpand = unknown> = Required<TasksRecord> & BaseSystemFields<Texpand>
 export type TeamsResponse<Texpand = unknown> = Required<TeamsRecord> & BaseSystemFields<Texpand>
@@ -176,6 +186,7 @@ export type CollectionRecords = {
 	_mfas: MfasRecord
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
+	invites: InvitesRecord
 	projects: ProjectsRecord
 	tasks: TasksRecord
 	teams: TeamsRecord
@@ -188,6 +199,7 @@ export type CollectionResponses = {
 	_mfas: MfasResponse
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
+	invites: InvitesResponse
 	projects: ProjectsResponse
 	tasks: TasksResponse
 	teams: TeamsResponse
@@ -203,6 +215,7 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_mfas'): RecordService<MfasResponse>
 	collection(idOrName: '_otps'): RecordService<OtpsResponse>
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
+	collection(idOrName: 'invites'): RecordService<InvitesResponse>
 	collection(idOrName: 'projects'): RecordService<ProjectsResponse>
 	collection(idOrName: 'tasks'): RecordService<TasksResponse>
 	collection(idOrName: 'teams'): RecordService<TeamsResponse>

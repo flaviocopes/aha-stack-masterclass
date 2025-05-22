@@ -1,6 +1,7 @@
 ---
 import LayoutApp from '@layouts/LayoutApp.astro'
-import { getProject } from '@data/pocketbase'
+import { getProject, getTeam } from '@data/pocketbase'
+
 import ButtonAddNewTask from '@components/app/tasks/ButtonAddNewTask.astro'
 import HamburgerMenuButton from '@components/app/HamburgerMenuButton.astro'
 import ProjectStatus from '@components/app/projects/ProjectStatus.astro'
@@ -11,6 +12,12 @@ const { project_id = '' } = Astro.params
 let project
 try {
   project = await getProject(Astro.locals.pb, project_id)
+  if (project.team) {
+    const team = await getTeam(Astro.locals.pb, project.team)
+    if (team.status === 'freezed') {
+      return Astro.redirect(`/app/team/${team.id}`)
+    }
+  }
 } catch (e) {
   return Astro.redirect('/app/dashboard')
 }
