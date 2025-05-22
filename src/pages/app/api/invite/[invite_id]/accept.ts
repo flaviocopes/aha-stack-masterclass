@@ -1,4 +1,10 @@
-import { addMember, deleteInvite, getInvite } from '@src/data/pocketbase'
+import {
+  addMember,
+  deleteInvite,
+  getInvite,
+  addActivity,
+  getTeam,
+} from '@src/data/pocketbase'
 
 import { getCurrentUserId } from '@lib/auth'
 
@@ -6,6 +12,7 @@ import type { APIRoute } from 'astro'
 
 export const POST: APIRoute = async ({ params, locals }) => {
   const invite = await getInvite(locals.pb, params.invite_id!)
+  const team = await getTeam(locals.pb, invite.team)
 
   if (invite) {
     await addMember(
@@ -14,6 +21,14 @@ export const POST: APIRoute = async ({ params, locals }) => {
       getCurrentUserId(locals.pb) as string
     )
     await deleteInvite(locals.pb, params.invite_id!)
+
+    await addActivity({
+      pb: locals.pb,
+      team: team.id,
+      project: '',
+      text: `Team ${team.name} invite accepted`,
+      type: 'invite_accepted',
+    })
   }
 
   return new Response(null, {

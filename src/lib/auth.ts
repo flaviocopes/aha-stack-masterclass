@@ -126,6 +126,11 @@ export function getCurrentUserEmail(pb: TypedPocketBase) {
   return pb.authStore.record?.email
 }
 
+export function getCurrentUserName(pb: TypedPocketBase) {
+  if (!pb) return null
+  return pb.authStore.record?.name
+}
+
 export async function sendVerificationEmail(
   pb: TypedPocketBase,
   email: string
@@ -154,4 +159,15 @@ export async function processTurnstile(cf_turnstile_response: string) {
   const data = await response.json()
 
   return data.success
+}
+
+export async function setCurrentUserName(pb: TypedPocketBase, name: string) {
+  pb.authStore.record!.name = name
+  await pb.collection('users').update(pb.authStore.record?.id as string, {
+    name: name,
+  })
+}
+
+export function getCookie(pb: TypedPocketBase) {
+  return pb.authStore.exportToCookie({ secure: false })
 }

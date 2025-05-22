@@ -11,6 +11,7 @@ export enum Collections {
 	Mfas = "_mfas",
 	Otps = "_otps",
 	Superusers = "_superusers",
+	Activities = "activities",
 	Invites = "invites",
 	Projects = "projects",
 	Tasks = "tasks",
@@ -94,6 +95,17 @@ export type SuperusersRecord = {
 	verified?: boolean
 }
 
+export type ActivitiesRecord = {
+	created?: IsoDateString
+	id: string
+	project?: RecordIdString
+	team?: RecordIdString
+	text?: string
+	type?: string
+	updated?: IsoDateString
+	user?: RecordIdString
+}
+
 export type InvitesRecord = {
 	created?: IsoDateString
 	email?: string
@@ -172,6 +184,7 @@ export type ExternalauthsResponse<Texpand = unknown> = Required<ExternalauthsRec
 export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemFields<Texpand>
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
+export type ActivitiesResponse<Texpand = unknown> = Required<ActivitiesRecord> & BaseSystemFields<Texpand>
 export type InvitesResponse<Texpand = unknown> = Required<InvitesRecord> & BaseSystemFields<Texpand>
 export type ProjectsResponse<Texpand = unknown> = Required<ProjectsRecord> & BaseSystemFields<Texpand>
 export type TasksResponse<Texpand = unknown> = Required<TasksRecord> & BaseSystemFields<Texpand>
@@ -186,6 +199,7 @@ export type CollectionRecords = {
 	_mfas: MfasRecord
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
+	activities: ActivitiesRecord
 	invites: InvitesRecord
 	projects: ProjectsRecord
 	tasks: TasksRecord
@@ -199,6 +213,7 @@ export type CollectionResponses = {
 	_mfas: MfasResponse
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
+	activities: ActivitiesResponse
 	invites: InvitesResponse
 	projects: ProjectsResponse
 	tasks: TasksResponse
@@ -215,6 +230,7 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_mfas'): RecordService<MfasResponse>
 	collection(idOrName: '_otps'): RecordService<OtpsResponse>
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
+	collection(idOrName: 'activities'): RecordService<ActivitiesResponse>
 	collection(idOrName: 'invites'): RecordService<InvitesResponse>
 	collection(idOrName: 'projects'): RecordService<ProjectsResponse>
 	collection(idOrName: 'tasks'): RecordService<TasksResponse>

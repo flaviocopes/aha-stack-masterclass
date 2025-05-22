@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 import type { APIRoute } from 'astro'
 
-import { updateTeam, getTeam } from '@src/data/pocketbase'
+import { updateTeam, getTeam, addActivity } from '@src/data/pocketbase'
 import { TeamsStatusOptions } from '@src/data/pocketbase-types'
 import { initStripe } from '@lib/stripe'
 
@@ -34,6 +34,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const subscription = event.data.object
     const { metadata } = subscription
     const { team_id, team_page_url } = metadata
+    const team = await getTeam(locals.pb, team_id)
 
     const portal_url = (
       await stripe.billingPortal.sessions.create({
@@ -47,6 +48,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
       status: TeamsStatusOptions.active,
       portal_url,
       stripe_subscription_id: subscription.id,
+    })
+
+    await addActivity({
+      pb: locals.pb,
+      team: team_id,
+      project: '',
+      text: `Team ${team.name} subscription created`,
+      type: 'subscription_created',
     })
   }
 
@@ -70,6 +79,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
     await updateTeam(locals.pb, team_id, {
       id: team_id,
       status: TeamsStatusOptions.freezed,
+    })
+
+    await addActivity({
+      pb: locals.pb,
+      team: team_id,
+      project: '',
+      text: `Team ${team.name} subscription deleted`,
+      type: 'subscription_deleted',
     })
   }
 
