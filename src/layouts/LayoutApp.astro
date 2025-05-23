@@ -133,7 +133,7 @@ const { title = 'Secretplan' } = Astro.props
     </script>
   </head>
 
-  <body x-data hx-boost='true'>
+  <body x-data hx-boost='true' class='select-none' hx-ext='preload'>
     <main class='min-h-screen dark:bg-black dark:text-white'>
       <div class='max-w-5xl px-4 py-4 mx-auto'>
         <dialog></dialog>
@@ -146,10 +146,13 @@ const { title = 'Secretplan' } = Astro.props
             <div x-show='showMenu' x-cloak>
               <Sidebar />
             </div>
-            <slot />
+            <div id='slot'>
+              <slot />
+            </div>
           </div>
         </div>
       </div>
     </main>
+    <script is:inline defer src='/preload.js'></script>
   </body>
 </html>

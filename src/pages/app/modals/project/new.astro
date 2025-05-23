@@ -7,13 +7,16 @@ import ButtonCancel from '@components/app/modals/ButtonCancel.astro'
 import InputField from '@components/app/modals/InputField.astro'
 
 const team_id = Astro.url.searchParams.get('team_id')?.toString() || ''
+
+Astro.response.headers.set('Cache-Control', 'max-age=3600')
 ---
 
 <ModalLayout title='New project'>
   <form
     class='space-y-6'
     hx-post='/app/api/projects'
-    hx-vals=`{"team_id": "${team_id}"}`>
+    hx-vals=`{"team_id": "${team_id}"}`
+    hx-on:htmx:after-request="document.querySelector('dialog').close()">
     <div>
       <div class='mt-1'>
         <InputField name='project_name' />
