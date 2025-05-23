@@ -5,6 +5,8 @@ import ModalLayout from '@components/app/modals/ModalLayout.astro'
 import ButtonSubmit from '@components/app/modals/ButtonSubmit.astro'
 import ButtonCancel from '@components/app/modals/ButtonCancel.astro'
 import InputField from '@components/app/modals/InputField.astro'
+
+Astro.response.headers.set('Cache-Control', 'max-age=3600')
 ---
 
 <ModalLayout title='New team'>
